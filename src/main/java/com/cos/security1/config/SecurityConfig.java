@@ -29,7 +29,13 @@ public class SecurityConfig{
                 // 추가
                 .and()
                 .formLogin()
-                .loginPage("/loginForm");
+                .loginPage("/loginForm")
+                // 로그인 관련 추가
+                // "/login"으로 접근을 하면 security가 낚아채서 대신 로그인을 처리해준다
+                // 따라서 따로 컨트롤러에 login메소드를 만들지 않아도 된다
+                .loginProcessingUrl("/login")
+                // 로그인 성공시 이동할 페이지
+                .defaultSuccessUrl("/");
 
         return http.build();
     }
