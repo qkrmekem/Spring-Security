@@ -15,6 +15,10 @@ public class PrincipalDetailsService implements UserDetailsService {
 
     private UserRepository userRepository;
 
+    public PrincipalDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     // 중요!!!
     // 여기서 username과 loginForm.html의 username과 이름이 동일하게 username이어야 한다.
     // 중요!!
@@ -22,6 +26,7 @@ public class PrincipalDetailsService implements UserDetailsService {
     // Security Session(Authentication(UserDetails))
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println("username = " + username);
         User user = userRepository.findByUsername(username);
         if (user != null) {
             return new PrincipalDetails(user);
