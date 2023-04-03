@@ -78,7 +78,7 @@ public class IndexController {
 
     // 여러 권한을 걸때 편함
     @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')") // data 메서드가 실행되기 직전에 실행
-    @GetMapping("/info")
+    @GetMapping("/data")
     @ResponseBody
     public String data() {
         return "데이터정보";
