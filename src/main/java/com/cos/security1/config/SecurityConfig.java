@@ -1,5 +1,6 @@
 package com.cos.security1.config;
 
+import com.cos.security1.config.oauth.PrincipalOauth2UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +17,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableGlobalMethodSecurity(securedEnabled = true,prePostEnabled = true)
 public class SecurityConfig{
 
-
+//1. 코드받기(인증), 2.엑세스토큰 받기(권한),
+// 3.사용자 정보를 가져오고, 4. 정보를 토대로 회원가입을 자동으로 진행시키기도 함.
+// 4-2(이메일, 전화번호, 이름, 아이디) + 쇼핑몰일 경우 집주소, 백화점의 경우 vip여부 정보가 필요
 
     // 패스워드를 암호화 시켜주는 객체
     @Bean
@@ -24,6 +27,8 @@ public class SecurityConfig{
         return new BCryptPasswordEncoder();
     }
 
+    @Autowired
+    private PrincipalOauth2UserService principalOauth2UserService;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();
@@ -45,7 +50,11 @@ public class SecurityConfig{
                 // oauth2관련 설정
                 .and()
                 .oauth2Login()
-                .loginPage("/loginForm"); // 구글로그인 성공 이후에 후처리가 필요
+                .loginPage("/loginForm")
+                // 코드 추가
+                .userInfoEndpoint()
+                .userService(principalOauth2UserService)
+        ; // 구글로그인 성공 이후에 후처리가 필요.  Tip oauth는 코드를 받는게 아니라, (엑세스토큰 + 사용자프로필 정보를 한번에 받음)
 
         return http.build();
     }

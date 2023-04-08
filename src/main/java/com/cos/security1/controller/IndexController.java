@@ -1,10 +1,15 @@
 package com.cos.security1.controller;
 
+import com.cos.security1.config.auth.PrincipalDetails;
 import com.cos.security1.model.User;
 import com.cos.security1.repository.UserRepository;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +20,32 @@ public class IndexController {
 
     private UserRepository userRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @GetMapping("/test/login")
+    // PrincipalDetails가 UserDetails을 상속받고 있기 때문에 UserDetails 대신에 PrincipalDetails를 사용할 수 있음
+    public @ResponseBody String loginTest(Authentication authentication, @AuthenticationPrincipal PrincipalDetails userDetails) { // DI(의존성주입)
+        System.out.println("/test/login =========");
+        // Authetication을 PrincipalDetails로 캐스팅하여 사용하는 방법
+        // PrincipalDetails는 우리가 앞서 생성했던 config.auth.PrincipalDetails
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        System.out.println("principalDetails = " + principalDetails.getUser());
+
+        // @AuthenticationPrincipal을 사용하는 방법
+        // PrincipalDetails가 UserDetails를 상속받고 있기 때문에 UserDetails 대신에 PrincipalDetails를 사용할 수 있음
+        System.out.println("userDetails = " + userDetails.getUser());
+        return "세션 정보 확인하기";
+    }
+
+    @GetMapping("/test/oauth/login")
+    @ResponseBody
+    // PrincipalDetails가 UserDetails을 상속받고 있기 때문에 UserDetails 대신에 PrincipalDetails를 사용할 수 있음
+    public String loginOAuthTest(Authentication authentication, @AuthenticationPrincipal OAuth2User oAuth) { // DI(의존성주입)
+        System.out.println("/test/oauth/login =========");
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        System.out.println("authentication = " + oAuth2User.getAttributes());
+        System.out.println("OAuth2User = " + oAuth.getAttributes());
+        return "OAuth 세션 정보 확인하기";
+    }
 
     public IndexController(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;

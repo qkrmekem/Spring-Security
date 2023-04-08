@@ -8,22 +8,28 @@ package com.cos.security1.config.auth;
 // User오브젝트 타입은 => UserDetails 타입 객체가 들어가야 함
 
 import com.cos.security1.model.User;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 // 의존성을 살펴보면
 // Security Session => Authentication => UserDetails
 // 여기는 UserDetails를 정의한 클래스
-public class PrincipalDetails implements UserDetails {
+@Data
+public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private User user;//콤포지션
 
     public PrincipalDetails(User user) {
         this.user = user;
     }
+
+
 
     // 해당 User의 권한을 리턴하는 메서드!!!
     @Override
@@ -72,5 +78,15 @@ public class PrincipalDetails implements UserDetails {
         //우리 사이트는 1년동안 회원 로그인을 안하면 휴면 계정으로 하기로 함!!!
         // 현재시간 - 로그인 시간 = 1년이상이면 휴면 계정으로 전환
         return true;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return null;
+    }
+
+    @Override
+    public String getName() {
+        return null;
     }
 }
