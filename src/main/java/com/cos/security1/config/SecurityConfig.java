@@ -21,11 +21,12 @@ public class SecurityConfig{
 // 3.사용자 정보를 가져오고, 4. 정보를 토대로 회원가입을 자동으로 진행시키기도 함.
 // 4-2(이메일, 전화번호, 이름, 아이디) + 쇼핑몰일 경우 집주소, 백화점의 경우 vip여부 정보가 필요
 
+
     // 패스워드를 암호화 시켜주는 객체
-    @Bean
-    public BCryptPasswordEncoder encodePwd() {
-        return new BCryptPasswordEncoder();
-    }
+//    @Bean
+//    public BCryptPasswordEncoder encodePwd() {
+//        return new BCryptPasswordEncoder();
+//    }
 
     @Autowired
     private PrincipalOauth2UserService principalOauth2UserService;

@@ -1,6 +1,8 @@
 package com.cos.security1.model;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -12,6 +14,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,4 +31,17 @@ public class User {
     private Timestamp loginDate; // 로그인 한 날짜
     @CreationTimestamp
     private Timestamp createDate;
+
+    @Builder
+    public User(int id, String username, String password, String email, String role, String provider, String providerId, Timestamp loginDate, Timestamp createDate) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.provider = provider;
+        this.providerId = providerId;
+        this.loginDate = loginDate;
+        this.createDate = createDate;
+    }
 }
